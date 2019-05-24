@@ -1,8 +1,6 @@
-import sys
-from pathlib import Path
 import difflib
+from pathlib import Path
 
-from debug import debug
 from test_util import appendTo
 from util import StudentWorkspace
 
@@ -21,10 +19,13 @@ def validateA1(testCasesDir: Path, ws: StudentWorkspace):
         with i.open("r") as f,  outputFile.open("r") as g:
             flines = f.readlines()
             glines = g.readlines()
-            diff = difflib.unified_diff(flines, glines, i.name, outputFile.name, lineterm="\n")
-            sys.stdout.writelines(diff)
-            append("Comparing to %s\n\n" % i)
-            append("".join(list(diff)))
-            append("\n\n")
-
+            diff = difflib.unified_diff(flines, glines, i.name, outputFile.name, n=4, lineterm="\n")
+            append("Comparing to %s\n" % i)
+            l = list(diff)
+            if not l:
+                append("PASS!\n\n")
+            else:
+                append("MISMATCH!\n")
+                append("".join(l))
+                append("\n")
 

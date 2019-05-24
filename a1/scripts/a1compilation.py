@@ -10,7 +10,7 @@ def compileStudent(ws: StudentWorkspace):
 
 
 def getRunTarget(ws: StudentWorkspace) -> Optional[RunTarget]:
-    file = firstFileMatching(ws.scratchDir, target="LuhnA*.java")
+    file = firstFileMatching(ws.scratchDir, target="Luhn*.java")
     if file:
         file = file.resolve()
         javaDir: Path = file.parent.resolve()

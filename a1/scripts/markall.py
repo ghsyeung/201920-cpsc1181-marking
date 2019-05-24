@@ -33,19 +33,14 @@ debug("Running with %s" % str(workspace))
 
 extractMain(workspace, clean=True)
 
+skipExtract = False
+
 for submission in allZipFilesIn(workspace.scratchDir):
     studentWorkspace: StudentWorkspace = createStudentWorkspace(workspace, submission)
-    extractStudent(studentWorkspace)
+    if not skipExtract:
+        extractStudent(studentWorkspace)
     runTarget = getRunTarget(studentWorkspace)
     if runTarget:
         compileRunTarget(studentWorkspace, runTarget)
         runA1Tests(studentWorkspace, runTarget, override=True)
         validateA1(workspace.testCasesDir, studentWorkspace)
-    exit(0)
-
-# studentDirs = extractStage(workspace)
-# studentDirs = [studentDirs[0]]
-#
-# a1CompileStage(markingDir, scratchDir, studentDirs)
-#
-# a1TestStage(markingDir, scratchDir, studentDirs)

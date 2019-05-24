@@ -16,7 +16,7 @@ def runA1Tests(ws: StudentWorkspace, target: RunTarget, override=False):
 
     def singleJavaRun(args: str):
         cpDir = target.outDir
-        className, extension = target.targetFile.name.split(".")
+        className = target.targetFile.stem
         return runJava(cpDir, className, args)
 
     def appendOutput(testNum: int, text: str):

@@ -1,0 +1,5 @@
+.idea/
+*.zip
+marking/
+scratch/
+scripts/__pycache__/

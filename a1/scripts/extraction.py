@@ -38,6 +38,8 @@ def extractStudent(ws: StudentWorkspace, clean=False):
         shutil.rmtree(ws.scratchDir)
         ws.scratchDir.mkdir()
 
+    ws.markingDir.resolve().mkdir(exist_ok=True)
+
     zipfile.ZipFile(ws.studentZip, 'r').extractall(path=ws.scratchDir)
 
     for i in filter(util.isDir, ws.scratchDir.glob("__MACOSX")):
