@@ -1,17 +1,23 @@
-import os
-from typing import List
+from pathlib import Path
+from typing import Optional
 
-from compilation_util import findDirContainingJava, javaCompile
-from debug import debug
+from compilation_util import findDirContainingJava, javaCompile, firstFileMatching
+from util import StudentWorkspace, RunTarget
 
 
-def compileStage(markingDir: str, scratchDir: str, studentDirs: List[str]):
-    for dir in studentDirs:
-        markingDirOfStudent = "%s/%s" % (markingDir, dir)
-        os.system("mkdir %s" % markingDirOfStudent)
+def compileStudent(ws: StudentWorkspace):
+    findDirContainingJava(ws.scratchDir, )
 
-        javaDir = findDirContainingJava(scratchDir, dir, target="Luhn*.java")
-        outDir = "%s/%s/%s" % (scratchDir, dir, "out")
-        if javaDir != None:
-            cpDir = str(javaDir.resolve())
-            javaCompile(markingDirOfStudent, outDir, cpDir, "*.java")
+
+def getRunTarget(ws: StudentWorkspace) -> Optional[RunTarget]:
+    file = firstFileMatching(ws.scratchDir, target="LuhnA*.java")
+    if file:
+        file = file.resolve()
+        javaDir: Path = file.parent.resolve()
+        outDir: Path = javaDir.parent.resolve() / "out"
+        outDir.mkdir(exist_ok=True)
+        return RunTarget(javaDir, outDir, file)
+
+
+def compileRunTarget(ws: StudentWorkspace, target: RunTarget):
+    javaCompile(ws.markingDir, target.outDir, target.javaDir, "*.java")

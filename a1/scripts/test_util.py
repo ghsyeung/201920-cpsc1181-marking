@@ -1,17 +1,18 @@
-import os
 import subprocess
+from pathlib import Path
 
 
-def runJava(cpDir: str, className: str, args: str):
-    command = ["java", "-cp", cpDir, className, args]
-    run = subprocess.run(command, stdout=subprocess.PIPE)
+def runJava(cpDir: Path, className: str, args: str) -> str:
+    command = ["java", "-cp", str(cpDir), className, args]
+    run = subprocess.run(command, encoding='utf-8', stdout=subprocess.PIPE)
     return run.stdout
 
 
-def appendTo(file: str, text: str):
-    if os.path.exists(file):
+def appendTo(file: Path, text: str):
+    if file.exists():
         mode = 'a'  # append if already exists
     else:
         mode = 'w'  # make a new file if not
-    with open(file, mode) as myfile:
-        myfile.write(text)
+    with file.open(mode) as myfile:
+        myfile.write(str(text))
+        myfile.close()

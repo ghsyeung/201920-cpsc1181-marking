@@ -1,15 +1,22 @@
 import os
 from pathlib import Path
 
+import util
 from debug import debug
 
 
-def findDirContainingJava(scratchDir: str, dir: str, target="*.java") -> Path:
-    files = list(Path(scratchDir, dir).glob("**/%s" % target))
+def firstFileMatching(studentScratch: Path, target="*.java") -> Path:
+    files = list(filter(util.isFile, studentScratch.glob("**/%s" % target)))
     first = files[0] if len(files) > 0 else None
+    return first
+
+
+def findDirContainingJava(studentScratch: Path, target="*.java") -> Path:
+    first = firstFileMatching(studentScratch, target)
     return first.parent if first else None
 
-def javaCompile(markingDir:str, outDir:str, cpDir: str, file: str):
-    command = "javac -d \"%s\" -cp \"%s\" \"%s\"/%s" % (outDir, cpDir, cpDir, file)
+
+def javaCompile(markingDir: Path, outDir: Path, cpDir: Path, file: str):
+    command = "javac -d \"%s\" -cp \"%s\" \"%s\"/%s" % (str(outDir), str(cpDir), str(cpDir), file)
     debug(command)
-    os.system("%s >> \"%s\"/compile.out 2>&1" % (command, markingDir))
+    os.system("%s >> \"%s\"/compile.out 2>&1" % (command, str(markingDir)))

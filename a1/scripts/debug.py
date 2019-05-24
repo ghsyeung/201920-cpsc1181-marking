@@ -3,8 +3,8 @@ import os, sys, glob;
 DEBUG_ON = os.environ.get("DEBUG_1181");
 
 
-def debugPrint(args):
-    print(args)
+def debugPrint(*args):
+    print(*args)
 
 
 def noop(_):

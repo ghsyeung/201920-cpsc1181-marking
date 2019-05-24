@@ -1,41 +1,44 @@
-import glob
-import os
+import shutil
+import zipfile
+from pathlib import Path
 from typing import List
 
-from debug import debug
+import util
+from util import Workspace, StudentWorkspace
 
 
-def extractAllStudentZip(scratchDir):
-    zipfiles = "/*.zip"
-    studentDirs = []
-
-    # extract each student's zip
-    for f in glob.glob("%s/%s" % (scratchDir, zipfiles)):
-        filename, extension = f.split(".")
-        s, name, date, f = filename.split(" - ", maxsplit=3)
-        debug("Extracting: %s, %s, %s" % (name, date, f))
-
-        studentDir = name.replace(" ", "_")
-
-        studentDirs.append(studentDir)
-
-        extractTo = "%s/%s" % (scratchDir, studentDir)
-        debug(extractTo)
-        os.system("rm -r \"%s\"" % extractTo)
-        os.system("unzip -d \"%s\" \"%s.%s\"" % (extractTo, filename, extension))
-        os.system("rm -r \"%s\"/__MACOSX" % extractTo)
-    return studentDirs
+def allZipFilesIn(dir: Path) -> List[Path]:
+    return list(filter(util.isFile, dir.glob("*.zip")))
 
 
-def extractStage(allzip, rootDir, markingDir, scratchDir):
-    # extract main assignment zip
-    if not os.path.exists(scratchDir):
-        os.system("unzip -d \"%s\" \"%s\"" % (scratchDir, allzip))
+def submissionZipToName(file: Path) -> str:
+    filename, extension = file.name.split(".")
+    s, name, date, f = filename.split(" - ", maxsplit=3)
+    studentDir = name.replace(" ", "_")
+    return studentDir
 
-    studentDirs: List[str] = extractAllStudentZip(scratchDir)
 
-    for directory in [markingDir]:
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+def createStudentWorkspace(workspace: Workspace, submission: Path):
+    studentDirName = submissionZipToName(submission)
+    studentScratchDir = workspace.scratchDir / studentDirName
+    studentMarkingDir = workspace.markingDir / studentDirName
+    return StudentWorkspace(studentMarkingDir, studentScratchDir, submission)
 
-    return studentDirs
+
+def extractMain(ws: Workspace, clean=False):
+    if clean and ws.scratchDir.exists():
+        shutil.rmtree(ws.scratchDir)
+        ws.scratchDir.mkdir()
+
+    zipfile.ZipFile(ws.mainZip, 'r').extractall(path=ws.scratchDir)
+
+
+def extractStudent(ws: StudentWorkspace, clean=False):
+    if clean and ws.scratchDir.exists():
+        shutil.rmtree(ws.scratchDir)
+        ws.scratchDir.mkdir()
+
+    zipfile.ZipFile(ws.studentZip, 'r').extractall(path=ws.scratchDir)
+
+    for i in filter(util.isDir, ws.scratchDir.glob("__MACOSX")):
+        shutil.rmtree(i)
