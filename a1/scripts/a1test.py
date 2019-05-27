@@ -27,7 +27,15 @@ def runA1Tests(ws: StudentWorkspace, target: RunTarget, override=False):
     testCase("single number less than 2 characters", 2, "2", singleJavaRun, appendOutput)
     testCase("2 digit number - invalid", 3, "41", singleJavaRun, appendOutput)
     testCase("2 digit number - valid", 4, "42", singleJavaRun, appendOutput)
-    testCase("long number - invalid", 5, "4298999999999999999999999999999999", singleJavaRun, appendOutput)
+    testCase("long number - invalid", 5, "4485513999294613", singleJavaRun, appendOutput)
+
+    testCase("long number - valid", 6, "4485513999294612", singleJavaRun, appendOutput)
+    testCase("empty arguments", 7, "", singleJavaRun, appendOutput)
+    testCase("Zero is not positive", 8, "0000", singleJavaRun, appendOutput)
+    testCase("Valid number greater than lng.MAX_VALUE", 9, "5305901611460339130131428629990709253530", singleJavaRun,
+             appendOutput)
+    testCase("Invalid number greater than Long.MAX_VALUE", 10, "5305901611460339130131428629990709253531",
+             singleJavaRun, appendOutput)
 
 
 def testCase(testFor: str, testNum: int, args: str, runJava: Callable[[str], str], append: Callable[[int, str], None]):

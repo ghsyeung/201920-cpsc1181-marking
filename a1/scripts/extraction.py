@@ -22,7 +22,7 @@ def createStudentWorkspace(workspace: Workspace, submission: Path):
     studentDirName = submissionZipToName(submission)
     studentScratchDir = workspace.scratchDir / studentDirName
     studentMarkingDir = workspace.markingDir / studentDirName
-    return StudentWorkspace(studentMarkingDir, studentScratchDir, submission)
+    return StudentWorkspace(studentMarkingDir, studentScratchDir, submission, studentDirName)
 
 
 def extractMain(ws: Workspace, clean=False):

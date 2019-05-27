@@ -14,6 +14,7 @@ class StudentWorkspace(NamedTuple):
     markingDir: Path
     scratchDir: Path
     studentZip: Path
+    studentDirName: str
 
 class RunTarget(NamedTuple):
     javaDir: Path

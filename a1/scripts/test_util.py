@@ -3,7 +3,9 @@ from pathlib import Path
 
 
 def runJava(cpDir: Path, className: str, args: str) -> str:
-    command = ["java", "-cp", str(cpDir), className, args]
+    command = ["java", "-cp", str(cpDir), className]
+    if len(args):
+        command.append(args)
     run = subprocess.run(command, encoding='utf-8', stdout=subprocess.PIPE)
     return run.stdout
 
