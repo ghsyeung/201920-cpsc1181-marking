@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Optional
 
-from compilation_util import findDirContainingJava, javaCompile, firstFileMatching
-from util import StudentWorkspace, RunTarget
+from common.compilation_util import findDirContainingJava, javaCompile, firstFileMatching
+from common.util import StudentWorkspace, RunTarget
 
 
 def compileStudent(ws: StudentWorkspace):

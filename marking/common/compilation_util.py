@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-import util
-from debug import debug
+from common import util
+from common.debug import debug
 
 
 def firstFileMatching(studentScratch: Path, target="*.java") -> Path:

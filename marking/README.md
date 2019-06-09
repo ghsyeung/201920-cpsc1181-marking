@@ -9,7 +9,9 @@
 ## Running
 
 ```bash
-DEBUG_1181=1 python3 scripts/markall.py a1-d2l.zip . 
+mkdir a2out
+cp -R a2/test_cases a2out
+DEBUG_1181=1 python3 -m bin.a2 a1/a1-d2l.zip a2out
 ```
 
 With `DEBUG` mode enabled, you'll see a lot of print-outs.

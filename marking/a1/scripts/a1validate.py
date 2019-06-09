@@ -3,8 +3,8 @@ import subprocess
 from pathlib import Path
 from typing import Callable
 
-from test_util import appendTo
-from util import StudentWorkspace
+from common.test_util import appendTo
+from common.util import StudentWorkspace
 
 
 def diffWithDifflib(i: Path, o: Path, validateOutput: Path):

@@ -1,8 +1,8 @@
 import shutil
 from typing import Callable
 
-from test_util import runJava, appendTo
-from util import StudentWorkspace, RunTarget
+from common.test_util import runJava, appendTo
+from common.util import StudentWorkspace, RunTarget
 
 
 def runA1Tests(ws: StudentWorkspace, target: RunTarget, override=False):

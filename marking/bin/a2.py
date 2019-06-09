@@ -2,6 +2,6 @@
 import sys
 print(sys.path)
 
-from a1.scripts.markall import runA1;
+from a2.scripts.markall import runA2;
 
-runA1()
+runA2()

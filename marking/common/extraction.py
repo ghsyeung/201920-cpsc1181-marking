@@ -3,8 +3,8 @@ import zipfile
 from pathlib import Path
 from typing import List
 
-import util
-from util import Workspace, StudentWorkspace
+from common import util
+from common.util import Workspace, StudentWorkspace
 
 
 def allZipFilesIn(dir: Path) -> List[Path]:

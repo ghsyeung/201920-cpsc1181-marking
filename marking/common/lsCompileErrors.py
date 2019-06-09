@@ -3,7 +3,7 @@
 import sys
 from pathlib import Path
 
-import util
+from common import util
 
 if len(sys.argv) != 2:
     print("""
