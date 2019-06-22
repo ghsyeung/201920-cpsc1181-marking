@@ -14,6 +14,21 @@ cp -R a2/test_cases a2out
 DEBUG_1181=1 python3 -m bin.a2 a1/a1-d2l.zip a2out
 ```
 
+### Extra command flags you can use
+
+```bash
+# Only extract the D2L zip file (skip compile and test)
+DEBUG_1181=1 python3 -m bin.a2 -E a2/a2-d2l.zip a2out 
+
+# Skip compile and extract (useful if you modify a student's java file)
+DEBUG_1181=1 python3 -m bin.a2 -c -e a2/a2-d2l.zip a2out 
+
+# Test a specific student (provide the student's folder name)
+# - this can be use with -c -e
+DEBUG_1181=1 python3 -m bin.a2 a2/a2-d2l.zip a2out Lobsang_Dhargay
+DEBUG_1181=1 python3 -m bin.a2 -c -e a2/a2-d2l.zip a2out Lobsang_Dhargay
+```
+
 With `DEBUG` mode enabled, you'll see a lot of print-outs.
 
 

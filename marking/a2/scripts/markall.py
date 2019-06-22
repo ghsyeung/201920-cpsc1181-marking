@@ -1,3 +1,4 @@
+import argparse
 import sys
 from pathlib import Path
 
@@ -6,18 +7,22 @@ from .a2test import runA2Tests
 from .a2validate import validateA2
 from common.debug import debug
 from common.extraction import extractMain, allZipFilesIn, createStudentWorkspace, extractStudent
-from common.util import Workspace, StudentWorkspace
+from common.util import Workspace, StudentWorkspace, RunConfig
 
 
 def runA2():
-    if len(sys.argv) != 3:
-        print("""
-    Usage: ./scripts/markall.py <zipfile> <root folder> 
-        """)
-        exit(0)
+    argparser = argparse.ArgumentParser(description="Assignment 2")
+    argparser.add_argument('--no-extract', '-e', dest="no_extract", action='store_true', help='skip extraction of zip file')
+    argparser.add_argument('--no-compile', '-c', dest="no_compile", action='store_true', help='skip compilation stage')
+    argparser.add_argument('--only-extract', '-E', dest="only_extract", action='store_true', help='only extract D2L zip file')
+    argparser.add_argument('mainZip', type=str, help='D2L zip file')
+    argparser.add_argument('rootDir', type=str, help='output folder')
+    argparser.add_argument('student', type=str, nargs='?', help='student name')
 
-    mainZip = Path(sys.argv[1])
-    rootDir = Path(sys.argv[2])
+    args = argparser.parse_args(sys.argv[1:])
+
+    mainZip = Path(args.mainZip)
+    rootDir = Path(args.rootDir)
     if (not rootDir.exists() or not mainZip.exists()):
         print("Invalid rootDir or main zip file")
         exit(-1)
@@ -28,25 +33,31 @@ def runA2():
     markingDir.mkdir(exist_ok=True)
     testCases = (rootDir / "test_cases").resolve()
 
+    runConfig = RunConfig(args.no_extract, args.no_compile, args.only_extract, args.student)
     workspace = Workspace(rootDir, scratchDir, markingDir, testCases, mainZip)
-    debug("Running with %s" % str(workspace))
+    debug("Running with \n  config=%s \n  in %s" % (str(runConfig), str(workspace)))
 
-    extractMain(workspace, clean=True)
+    skipExtract = runConfig.noExtract or runConfig.student
 
-    skipExtract = False
+    extractMain(workspace, clean=not skipExtract)
 
     for submission in allZipFilesIn(workspace.scratchDir)[:]:
         studentWorkspace: StudentWorkspace = createStudentWorkspace(workspace, submission)
 
-        print("Running %s" % studentWorkspace.studentDirName)
+        # run for everyone or only the student specified
+        if not runConfig.student or runConfig.student == studentWorkspace.studentDirName:
+            print("Running %s" % studentWorkspace.studentDirName)
 
-        if not skipExtract:
-            extractStudent(studentWorkspace)
-        runTarget = getRunTarget(studentWorkspace)
-        if runTarget:
-            classNames = copyA2TestFiles(workspace.testCasesDir, studentWorkspace)
-            compileRunTarget(studentWorkspace, runTarget, classNames)
-            runA2Tests(studentWorkspace, runTarget, override=True)
-            validateA2(workspace.testCasesDir, studentWorkspace, override=True)
+            if not skipExtract:
+                extractStudent(studentWorkspace)
 
-        print("\n")
+            if not runConfig.onlyExtract:
+                runTarget = getRunTarget(studentWorkspace)
+                if runTarget:
+                    classNames = copyA2TestFiles(workspace.testCasesDir, studentWorkspace)
+                    if not runConfig.noCompile:
+                        compileRunTarget(studentWorkspace, runTarget, classNames)
+                    runA2Tests(studentWorkspace, runTarget, override=True)
+                    validateA2(workspace.testCasesDir, studentWorkspace, override=True)
+
+            print("\n")

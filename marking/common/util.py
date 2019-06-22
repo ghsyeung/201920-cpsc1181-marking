@@ -1,6 +1,11 @@
 from pathlib import Path
 from typing import NamedTuple
 
+class RunConfig(NamedTuple):
+    noExtract: bool
+    noCompile: bool
+    onlyExtract: bool
+    student: str
 
 class Workspace(NamedTuple):
     rootDir: Path
