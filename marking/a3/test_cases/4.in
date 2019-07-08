@@ -1,0 +1,4 @@
+run app1 100
+# should kill app 1
+run app2 1
+exit

@@ -1,0 +1,4 @@
+run app1 1
+# should list one app
+list
+exit

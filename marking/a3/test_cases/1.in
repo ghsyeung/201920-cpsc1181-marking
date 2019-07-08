@@ -1,0 +1,3 @@
+# should exceed memory requirement
+run app1 101
+exit
