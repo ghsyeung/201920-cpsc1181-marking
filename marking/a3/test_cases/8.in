@@ -1,0 +1,5 @@
+run app1 10
+run app2 90
+run app3 10
+#=> Bonus 2 - Most Memory First should evict app2
+exit

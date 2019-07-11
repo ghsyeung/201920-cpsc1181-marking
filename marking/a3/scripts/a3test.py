@@ -30,10 +30,14 @@ def runA3Tests(testCasesDir: Path, ws: StudentWorkspace, target: RunTarget, over
             content = content_file.read()
             return content
 
-    for testNum in range(1, 7):
-        testCase(testNum, readTestFile, singleJavaRun, appendOutput)
+    for testNum in range(1, 8):
+        testCase(testNum, "RunSystem", readTestFile, singleJavaRun, appendOutput)
+    testCase(8, "RunSystemMostMemory", readTestFile, singleJavaRun, appendOutput)
+    testCase(9, "RunSystemLRU", readTestFile, singleJavaRun, appendOutput)
+    testCase(10, "RunSystemLRU", readTestFile, singleJavaRun, appendOutput)
 
-def testCase(testNum: int, readTestInput: Callable[[int], str], runJava: Callable[[str, str], str], append: Callable[[int, str], None]):
+
+def testCase(testNum: int, className: str, readTestInput: Callable[[int], str], runJava: Callable[[str, str], str], append: Callable[[int, str], None]):
     input = readTestInput(testNum)
-    javaOut = runJava("RunSystem", ["100", "0"], input)
+    javaOut = runJava(className, ["100", "0"], input)
     append(testNum, javaOut)

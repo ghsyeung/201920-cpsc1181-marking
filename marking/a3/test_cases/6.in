@@ -1,5 +1,5 @@
 run app1 1
 run app2 1
-# should list multiple apps
 list
+#=> should list multiple apps
 exit

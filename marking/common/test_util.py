@@ -13,29 +13,48 @@ def runJava(cpDir: Path, className: str, args: str) -> str:
     run = subprocess.run(command, encoding='utf-8', stdout=subprocess.PIPE)
     return run.stdout
 
-def runJavaWithInput(cpDir: Path, className: str, args: [str], input: str, sleep=1) -> str:
-    def notEmptyAndNotComment(s:str) -> bool:
+def runJavaWithInput(cpDir: Path, className: str, args: [str], input: str, sleep=0.5) -> str:
+    def notEmpty(s:str) -> bool:
         stripped = s.strip()
-        return stripped != "" and not stripped.startswith("#")
+        return stripped != ""
+
+    def notComment(s:str) -> bool:
+        stripped = s.strip()
+        return not stripped.startswith("#")
 
     command = ["java", "-cp", str(cpDir), className]
     if len(args):
         command.extend(args)
 
     output = ""
-    lines = filter(notEmptyAndNotComment, input.split("\n"))
+    lines = filter(notEmpty, input.split("\n"))
     try:
+        # A hack to get all process.stdin, process.stdout and process.stderr in the same place
         echo = subprocess.Popen(["cat"], encoding='utf-8', stdout=subprocess.PIPE, stdin=subprocess.PIPE)
         process = subprocess.Popen(command, encoding='utf-8', stdout=echo.stdin, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
         try:
+            # enabled command delay
+            cachedCommand = None
             time.sleep(sleep)
             for line in lines:
-                process.stdin.write(line + "\n")
+                if notComment(line):
+                    # if we have a delayed command, we run it first
+                    if cachedCommand is not None:
+                        process.stdin.write(cachedCommand + "\n")
+                        process.stdin.flush()
+                        time.sleep(sleep)
+
+                    cachedCommand = line
+                    echo.stdin.write(line + "\n")
+                    echo.stdin.flush()
+                else:
+                    echo.stdin.write("\n" + line + "\n\n")
+                    echo.stdin.flush()
+
+            # final delayed command
+            if cachedCommand is not None:
+                process.stdin.write(cachedCommand + "\n")
                 process.stdin.flush()
-
-                echo.stdin.write(line + "\n")
-                echo.stdin.flush()
-
                 time.sleep(sleep)
 
             (stdout, _) = echo.communicate()

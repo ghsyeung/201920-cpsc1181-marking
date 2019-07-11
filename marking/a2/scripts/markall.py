@@ -31,10 +31,10 @@ def runA2():
     scratchDir.mkdir(exist_ok=True)
     markingDir = (rootDir / "marking").resolve()
     markingDir.mkdir(exist_ok=True)
-    testCases = (rootDir / "test_cases").resolve()
+    testCasesDir: Path = (rootDir / "test_cases").resolve()
 
     runConfig = RunConfig(args.no_extract, args.no_compile, args.only_extract, args.student)
-    workspace = Workspace(rootDir, scratchDir, markingDir, testCases, mainZip)
+    workspace = Workspace(rootDir, scratchDir, markingDir, mainZip, testCasesDir)
     debug("Running with \n  config=%s \n  in %s" % (str(runConfig), str(workspace)))
 
     skipExtract = runConfig.noExtract or runConfig.student

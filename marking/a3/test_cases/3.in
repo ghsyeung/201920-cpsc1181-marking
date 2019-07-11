@@ -1,4 +1,4 @@
 run app1 100
-# should be able to stop app
 stop 1
+#=> should be able to stop app
 exit

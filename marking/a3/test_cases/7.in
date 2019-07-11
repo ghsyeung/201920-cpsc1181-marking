@@ -1,0 +1,5 @@
+run app1 1
+run app2 10
+list mem
+#=> Bonus 1 - should list multiple apps in descending memory order
+exit

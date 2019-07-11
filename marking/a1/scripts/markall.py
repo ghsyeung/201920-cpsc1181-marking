@@ -26,9 +26,9 @@ def runA1():
     scratchDir.mkdir(exist_ok=True)
     markingDir = (rootDir / "marking").resolve()
     markingDir.mkdir(exist_ok=True)
-    testCases = (rootDir / "test_cases").resolve()
+    testCasesDir: Path = (rootDir / "test_cases").resolve()
 
-    workspace = Workspace(rootDir, scratchDir, markingDir, testCases, mainZip)
+    workspace = Workspace(rootDir, scratchDir, markingDir, mainZip, testCasesDir)
     debug("Running with %s" % str(workspace))
 
     extractMain(workspace, clean=True)

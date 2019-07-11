@@ -30,3 +30,11 @@ def compileRunTarget(ws: StudentWorkspace, target: RunTarget, classNames: List[s
     for i in classNames:
         javaCompile(ws.markingDir, target.outDir, target.javaDir, "%s.java" % i)
 
+
+def copyExtraSource(extraSourceDir: Path, rt: RunTarget):
+    print(extraSourceDir)
+    extraJavaFiles = list(extraSourceDir.resolve().glob("*.java"))
+    print(extraJavaFiles)
+    for i in extraJavaFiles:
+        shutil.copy(i, rt.javaDir)
+    return [i.stem for i in extraJavaFiles]

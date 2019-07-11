@@ -5,7 +5,7 @@ from pathlib import Path
 from common.debug import debug
 from common.extraction import extractMain, allZipFilesIn, createStudentWorkspace, extractStudent
 from common.util import Workspace, StudentWorkspace, RunConfig
-from .a3compilation import getRunTarget, compileRunTarget
+from .a3compilation import getRunTarget, compileRunTarget, copyExtraSource
 from .a3test import runA3Tests
 from .a3validate import validateA3
 
@@ -31,10 +31,11 @@ def runA3():
     scratchDir.mkdir(exist_ok=True)
     markingDir = (rootDir / "marking").resolve()
     markingDir.mkdir(exist_ok=True)
-    testCases = (rootDir / "test_cases").resolve()
+    testCasesDir: Path = (rootDir / "test_cases").resolve()
+    extraSourceDir: Path = (rootDir / "java_files").resolve()
 
     runConfig = RunConfig(args.no_extract, args.no_compile, args.only_extract, args.student)
-    workspace = Workspace(rootDir, scratchDir, markingDir, testCases, mainZip)
+    workspace = Workspace(rootDir, scratchDir, markingDir, mainZip, testCasesDir, extraSourceDir)
     debug("Running with \n  config=%s \n  in %s" % (str(runConfig), str(workspace)))
 
     skipExtract = runConfig.noExtract or runConfig.student
@@ -54,7 +55,8 @@ def runA3():
             if not runConfig.onlyExtract:
                 runTarget = getRunTarget(studentWorkspace)
                 if runTarget:
-                    classNames = ["RunSystem"]
+                    extraClasses = copyExtraSource(workspace.extraSourceDir, runTarget)
+                    classNames = ["RunSystem"] + extraClasses
                     if not runConfig.noCompile:
                         compileRunTarget(studentWorkspace, runTarget, classNames)
                     runA3Tests(workspace.testCasesDir, studentWorkspace, runTarget, override=True)

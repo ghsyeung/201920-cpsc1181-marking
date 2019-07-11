@@ -1,4 +1,4 @@
 run app1 1
-# should list one app
 list
+#=> should list one app
 exit

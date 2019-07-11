@@ -1,0 +1,6 @@
+run app1 10
+run app2 90
+use 1
+run app3 10
+#=> Bonus 3 - LRU should evict app 2 because we used 1
+exit

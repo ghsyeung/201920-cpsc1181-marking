@@ -1,3 +1,4 @@
-# should not exceed memory requirement
 run app1 100
+#=> should not exceed memory requirement
+
 exit

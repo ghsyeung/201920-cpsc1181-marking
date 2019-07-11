@@ -11,8 +11,9 @@ class Workspace(NamedTuple):
     rootDir: Path
     scratchDir: Path
     markingDir: Path
-    testCasesDir: Path
     mainZip: Path
+    testCasesDir: Path
+    extraSourceDir: Path
 
 
 class StudentWorkspace(NamedTuple):
