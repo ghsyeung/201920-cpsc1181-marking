@@ -11,7 +11,7 @@ def compileStudent(ws: StudentWorkspace):
 
 
 def findSrcFolder(dir: Path) -> Optional[Path]:
-    file = firstFileMatching(dir, target="RunSystem*.java")
+    file = firstFileMatching(dir, target="Run*.java")
     print(file)
     if file:
         file = file.resolve()

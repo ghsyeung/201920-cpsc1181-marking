@@ -3,30 +3,30 @@
 ## Prepare
 
 1. Download assignment zip file from D2L
-2. Place zip file in the same folder as the scripts folder
-   - say `a1/a1-d2l.zip`
+2. Place zip file in the same folder as the root folder
+   - say `a3-d2l.zip`
    
 ## Running
 
 ```bash
-mkdir a2out
-cp -R a2/test_cases a2out
-DEBUG_1181=1 python3 -m bin.a2 a1/a1-d2l.zip a2out
+mkdir a3out
+cp -R a3/java_files test_cases a3out
+DEBUG_1181=1 python3 -m bin.a3 a3-d2l.zip a3out
 ```
 
 ### Extra command flags you can use
 
 ```bash
 # Only extract the D2L zip file (skip compile and test)
-DEBUG_1181=1 python3 -m bin.a2 -E a2/a2-d2l.zip a2out 
+DEBUG_1181=1 python3 -m bin.a3 -E a3-d2l.zip a3out 
 
 # Skip compile and extract (useful if you modify a student's java file)
-DEBUG_1181=1 python3 -m bin.a2 -c -e a2/a2-d2l.zip a2out 
+DEBUG_1181=1 python3 -m bin.a3 -c -e a3-d2l.zip a3out 
 
 # Test a specific student (provide the student's folder name)
 # - this can be use with -c -e
-DEBUG_1181=1 python3 -m bin.a2 a2/a2-d2l.zip a2out Lobsang_Dhargay
-DEBUG_1181=1 python3 -m bin.a2 -c -e a2/a2-d2l.zip a2out Lobsang_Dhargay
+DEBUG_1181=1 python3 -m bin.a3 a3-d2l.zip a3out Lobsang_Dhargay
+DEBUG_1181=1 python3 -m bin.a3 -c -e a3-d2l.zip a3out Lobsang_Dhargay
 ```
 
 With `DEBUG` mode enabled, you'll see a lot of print-outs.
@@ -50,7 +50,7 @@ With `DEBUG` mode enabled, you'll see a lot of print-outs.
 Use the `lsCompileErrors` tool
 
 ```bash
-python3 scripts/lsCompileErrors.py <root dir>/marking
+python3 -m common.lsCompileErrors <root dir>/marking
 ```
 
 to print out all students with compilation issues. 
